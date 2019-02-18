@@ -3,14 +3,17 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-let config;
 
-if (process.env.NODE_ENV === 'production') {
-  config = require('./config/config.prod.js')
-} else {
-  config = require('./config/config.dev.js')
-}
+const isProd = process.env.NODE_ENV === 'production';
+const API_URL = isProd
+  ? 'prod_url'
+  : 'dev_url'
+;
 
+const config = isProd
+  ? require('./config/config.prod.js')
+  : require('./config/config.dev.js')
+;
 
 console.log(`----------- ${process.env.NODE_ENV} -----------`);
 
@@ -31,7 +34,8 @@ module.exports = {
     new HtmlWebpackPlugin(),
     new CleanWebpackPlugin(['dist']),
     new webpack.DefinePlugin({
-      CONFIG: JSON.stringify(config)
+      'API_URL': JSON.stringify(API_URL),
+      'CONFIG': JSON.stringify(config),
     }),
   ],
 

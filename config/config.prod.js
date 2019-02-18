@@ -1,3 +1,3 @@
 module.exports = {
-  API_URL: 'development_url'
+  API_URL: 'production_url'
 };
