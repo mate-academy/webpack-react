@@ -1,6 +1,9 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+
+console.log(`----------- ${process.env.NODE_ENV} -----------`);
 
 module.exports = {
   mode: 'none',
@@ -17,8 +20,15 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin(),
-    new CleanWebpackPlugin(['dist'])
+    new CleanWebpackPlugin(['dist']),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
   ],
+
+  optimization: {
+    minimize: false
+  },
 
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
