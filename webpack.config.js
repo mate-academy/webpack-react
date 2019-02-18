@@ -18,9 +18,8 @@ const config = isProd
 console.log(`----------- ${process.env.NODE_ENV} -----------`);
 
 module.exports = {
-  mode: 'none',
   entry: {
-    'index': './src/index.js'
+    'index': './src/index.jsx'
   },
 
   output: {
@@ -31,36 +30,41 @@ module.exports = {
   devtool: 'source-map',
 
   plugins: [
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      chunks: ['index'],
+    }),
     new CleanWebpackPlugin(['dist']),
     new webpack.DefinePlugin({
       'API_URL': JSON.stringify(API_URL),
       'CONFIG': JSON.stringify(config),
     }),
+    new webpack.HotModuleReplacementPlugin()
   ],
 
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: [
+              '@babel/preset-env',
+              "@babel/preset-react"
+            ],
+            plugins: ['@babel/plugin-transform-runtime']
           }
         }
       }
     ]
   },
 
-  optimization: {
-    minimize: false
-  },
-
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
-    port: 9000
+    port: 9000,
+    hot: true,
   }
 };
