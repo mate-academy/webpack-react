@@ -1,1 +1,3 @@
-export const API_URL = 'development_url';
+module.exports = {
+  API_URL: 'development_url'
+};
